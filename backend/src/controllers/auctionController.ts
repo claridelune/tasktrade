@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import prisma from '../configs';
 import {Bid} from '../types';
 
 class AuctionController {
