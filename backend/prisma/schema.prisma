@@ -1,0 +1,95 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                Int           @id @default(autoincrement())
+  username          String        @unique
+  email             String        @unique
+  passwordHash      String
+  registrationDate  DateTime      @default(now())
+  roles             Role[]
+  tasks             Task[]
+  bids              Bid[]
+  boughtTransactions Transaction[] @relation("TransactionsAsBuyer")
+  soldTransactions   Transaction[] @relation("TransactionsAsSeller")
+  refreshToken      String?
+}
+
+model Task {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  status      TaskStatus
+  category    Category
+  sellerId    Int
+  seller      User        @relation(fields: [sellerId], references: [id])
+  bids        Bid[]
+  createdAt   DateTime    @default(now())
+  auction     Auction?
+  transaction Transaction?
+}
+
+model Bid {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  taskId    Int
+  task      Task    @relation(fields: [taskId], references: [id])
+  bidderId  Int     // Asegúrate de que este campo exista
+  bidder    User    @relation(fields: [bidderId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Auction {
+  id            Int          @id @default(autoincrement())
+  startingPrice Float
+  taskId        Int          @unique
+  task          Task         @relation(fields: [taskId], references: [id])
+  status        AuctionStatus
+  startDate     DateTime
+  endDate       DateTime
+}
+
+model Transaction {
+  id        Int       @id @default(autoincrement())
+  buyerId   Int
+  sellerId  Int
+  taskId    Int       @unique
+  amount    Float
+  date      DateTime  @default(now())
+  buyer     User      @relation("TransactionsAsBuyer", fields: [buyerId], references: [id])
+  seller    User      @relation("TransactionsAsSeller", fields: [sellerId], references: [id])
+  task      Task      @relation(fields: [taskId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  SELLER
+  BUYER
+}
+
+enum TaskStatus {
+  AVAILABLE
+  SOLD
+  AUCTION
+}
+
+enum AuctionStatus {
+  ACTIVE
+  ENDED
+}
+
+enum Category {
+  MATHEMATICS
+  SCIENCE
+  HUMANITIES
+  LANGUAGES
+  ART
+  TECHNOLOGY
+}
