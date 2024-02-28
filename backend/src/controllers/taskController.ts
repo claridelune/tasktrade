@@ -1,12 +1,13 @@
 import Joi from 'joi';
 import { Request, Response } from 'express';
-import prisma from '../configs';
-import { TaskStatus } from '@prisma/client';
+import { TaskStatus, Category } from '../types';
+import TaskService from '../services/taskService'
 
 const taskSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
-  status: Joi.string().valid(TaskStatus.AVAILABLE, TaskStatus.SOLD, TaskStatus.AUCTION),
+  status: Joi.string().valid(TaskStatus.Available, TaskStatus.Sold, TaskStatus.Auction),
+  category: Joi.string().valid(Category.Art, Category.Humanities, Category.Languages, Category.Mathematics, Category.Science, Category.Technology),
   ownerId: Joi.number().required(),
   startingBid: Joi.number().required(),
 });
@@ -19,12 +20,7 @@ class TaskController {
     }
 
     try {
-      const task = await prisma.task.create({
-        data: {
-          ...req.body,
-          ownerId: Number(req.body.ownerId),
-        },
-      });
+        const task = TaskService.createTask(req.body);
       res.status(201).json(task);
     } catch (error) {
       console.error(error);
@@ -32,35 +28,30 @@ class TaskController {
     }
   }
 
-  async updateTask(req: Request, res: Response) {
-    const { id } = req.params;
-    const taskData = { ...req.body };
+    async updateTask(req: Request, res: Response) {
+        const {id} = req.params;
+        const taskData = {...req.body};
 
-    try {
-      const updatedTask = await prisma.task.update({
-        where: { id: Number(id) },
-        data: taskData,
-      });
-      res.status(200).json(updatedTask);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        try {
+            const updatedTask = TaskService.updateTask(id, taskData);
+            res.status(200).json(updatedTask);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Internal server error'});
+        }
     }
-  }
 
-  async deleteTask(req: Request, res: Response) {
-    const { id } = req.params;
+    async deleteTask(req: Request, res: Response) {
+        const {id} = req.params;
 
-    try {
-      await prisma.task.delete({
-        where: { id: Number(id) },
-      });
-      res.status(204).send();
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        try {
+            TaskService.deleteTask(id);
+            res.status(204).send();
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Internal server error'});
+        }
     }
-  }
 }
 
 export default new TaskController();

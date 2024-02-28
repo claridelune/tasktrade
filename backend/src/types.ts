@@ -15,6 +15,15 @@ export enum TaskStatus {
   Auction = "AUCTION",
 }
 
+export enum Category {
+    Mathematics = "MATHEMATICS",
+    Science = "SCIENCE",
+    Humanities = "HUMANITIES",
+    Languages = "LANGUAGES",
+    Art = "ART",
+    Technology = "TECHNOLOGY",
+}
+
 export interface Bid {
   id: number;
   taskId: number;
