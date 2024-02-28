@@ -9,5 +9,6 @@ router.put('/update', userController.update);
 router.delete('/delete/:id', userController.delete);
 router.get('/count', userController.count);
 router.get('/', userController.getAll);
+router.get('/currentUser', userController.currentUser);
 
 export default router;

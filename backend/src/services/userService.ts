@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import prisma from '../configs';
+import jwt from 'jsonwebtoken'
 
 class UserService {
     async getAll() {
@@ -87,6 +88,19 @@ class UserService {
         await prisma.user.delete({
             where: {id: parseInt(id)},
         });
+    }
+
+    currentUser(token: string){
+        try {
+            const JWT_SECRET = process.env.JWT_SECRET || '';
+            const decodedToken: any = jwt.verify(token, JWT_SECRET);
+            const userId = decodedToken.userId;
+            return userId;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Invalid token');
+        }
+
     }
 }
 
