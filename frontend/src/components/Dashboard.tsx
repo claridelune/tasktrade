@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
                 <Card.Title>{task.title}</Card.Title>
                 <Card.Text>{task.description}</Card.Text>
                 <Card.Text>${task.price}</Card.Text>
-                <Button variant="primary">Comprar</Button>
+                <Button variant="primary">Buy</Button>
               </Card.Body>
             </Card>
           </Col>
@@ -55,11 +55,11 @@ const Dashboard: React.FC = () => {
       </Row>
       <div className="mt-3">
         <Button variant="secondary" onClick={handlePrevPage} disabled={currentPage === 1}>
-          Anterior
+          Prev
         </Button>
         {' '}
         <Button variant="secondary" onClick={handleNextPage}>
-          Siguiente
+          Next
         </Button>
       </div>
     </Container>

@@ -35,13 +35,13 @@ const Cart: React.FC = () => {
 
   return (
     <Container>
-      <h2>Carrito</h2>
+      <h2>Car</h2>
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Título</th>
-            <th>Precio</th>
-            <th>Acciones</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@ const Cart: React.FC = () => {
               <td>${item.price}</td>
               <td>
                 <Button variant="danger" onClick={() => handleRemoveFromCart(item.id)}>
-                  Eliminar
+                  Delete
                 </Button>
               </td>
             </tr>
@@ -61,7 +61,7 @@ const Cart: React.FC = () => {
       <div className="text-end">
         <h4>Total: ${calculateTotal()}</h4>
         <Button variant="success" onClick={handleCheckout}>
-          Pagar
+          Pay
         </Button>
       </div>
     </Container>
