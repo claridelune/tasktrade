@@ -1,26 +1,31 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Container, Navbar as BootstrapNavbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 
-const Navigation: React.FC = () => {
+const Navbar: React.FC = () => {
+  const { user } = useAuth();
+
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <BootstrapNavbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/">TaskTrade</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <BootstrapNavbar.Brand as={Link} to="/">TaskTrade</BootstrapNavbar.Brand>
+        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
+        <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/add-task">Add Task</Nav.Link>
-            <Nav.Link as={Link} to="/cart">Car</Nav.Link>
+            <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
+            <Nav.Link as={Link} to="/add-task">Agregar Tarea</Nav.Link>
+            <Nav.Link as={Link} to="/cart">Carrito</Nav.Link>
           </Nav>
-          <Nav>
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
-            <Nav.Link as={Link} to="/register">Register</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+          {user && (
+            <Nav>
+              <Nav.Link disabled>{user}</Nav.Link>
+            </Nav>
+          )}
+        </BootstrapNavbar.Collapse>
       </Container>
-    </Navbar>
+    </BootstrapNavbar>
   );
 };
 
-export default Navigation;
+export default Navbar;

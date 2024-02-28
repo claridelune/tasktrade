@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 const Register: React.FC = () => {
-  // const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí añadirías la lógica para registrar al usuario con tu backend
-    // Por ejemplo, una solicitud POST a tu API de backend
+    setError('');
 
-    // Si el registro es exitoso, podrías redirigir al usuario al login o dashboard
-    // history.push('/login');
-
-    console.log('Registro', username, email, password);
+    try {
+      await axios.post('/api/auth/register', { username, email, password });
+      navigate('/login');
+    } catch (error: any) {
+      setError('Fallo al registrarse. Intenta nuevamente.');
+    }
   };
 
   return (

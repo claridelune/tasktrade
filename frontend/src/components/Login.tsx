@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 
 const Login: React.FC = () => {
-  // const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí añadirías la lógica para autenticar al usuario con tu backend
-    // Por ejemplo, una solicitud POST a tu API de backend
+    setError('');
 
-    // Si la autenticación es exitosa, podrías redirigir al usuario al dashboard
-    // history.push('/');
-
-    console.log('Login', email, password);
+    try {
+      const { data } = await axios.post('/api/auth/login', { email, password });
+      localStorage.setItem('token', data.token); // Asumiendo que el backend responde con un token
+      setUser(data.username); // O la información de usuario que prefieras almacenar
+      navigate('/'); // Redirigir al Dashboard tras el login exitoso
+    } catch (error: any) {
+      setError('Fallo al iniciar sesión. Verifica tus credenciales.');
+    }
   };
 
   return (
@@ -45,7 +52,7 @@ const Login: React.FC = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Iniciar Sesión
+              Login
             </Button>
           </Form>
         </Col>
