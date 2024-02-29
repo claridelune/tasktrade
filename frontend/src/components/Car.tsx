@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button } from 'react-bootstrap';
 
-interface TaskInCart {
+interface TaskInCar {
   id: number;
   title: string;
   price: number;
 }
 
-const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<TaskInCart[]>([]);
+const Car: React.FC = () => {
+  const [carItems, setCarItems] = useState<TaskInCar[]>([]);
 
   useEffect(() => {
     // Aquí deberías cargar los ítems del carrito, ya sea desde el estado global de la aplicación, localStorage, o una API
     // Por ahora, vamos a usar datos de ejemplo
-    const itemsInCart: TaskInCart[] = [
+    const itemsInCar: TaskInCar[] = [
       { id: 1, title: 'Tarea de Matemáticas', price: 10 },
       { id: 2, title: 'Ensayo de Historia', price: 20 },
     ];
-    setCartItems(itemsInCart);
+    setCarItems(itemsInCar);
   }, []);
 
-  const handleRemoveFromCart = (taskId: number) => {
-    setCartItems(cartItems.filter(item => item.id !== taskId));
+  const handleRemoveFromCar = (taskId: number) => {
+    setCarItems(carItems.filter(item => item.id !== taskId));
   };
 
   const handleCheckout = () => {
@@ -30,7 +30,7 @@ const Cart: React.FC = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((acc, item) => acc + item.price, 0);
+    return carItems.reduce((acc, item) => acc + item.price, 0);
   };
 
   return (
@@ -45,12 +45,12 @@ const Cart: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {cartItems.map(item => (
+          {carItems.map(item => (
             <tr key={item.id}>
               <td>{item.title}</td>
               <td>${item.price}</td>
               <td>
-                <Button variant="danger" onClick={() => handleRemoveFromCart(item.id)}>
+                <Button variant="danger" onClick={() => handleRemoveFromCar(item.id)}>
                   Delete
                 </Button>
               </td>
@@ -68,4 +68,4 @@ const Cart: React.FC = () => {
   );
 };
 
-export default Cart;
+export default Car;

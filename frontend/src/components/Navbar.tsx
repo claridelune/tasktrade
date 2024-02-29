@@ -14,8 +14,8 @@ const Navbar: React.FC = () => {
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
-            <Nav.Link as={Link} to="/add-task">Agregar Tarea</Nav.Link>
-            <Nav.Link as={Link} to="/cart">Carrito</Nav.Link>
+            <Nav.Link as={Link} to="/add-task">Add Task</Nav.Link>
+            <Nav.Link as={Link} to="/car">Car</Nav.Link>
           </Nav>
           {user && (
             <Nav>

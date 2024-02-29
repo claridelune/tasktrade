@@ -7,6 +7,7 @@ const AddTask: React.FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('');
+    const [fileUrl, setFileUrl] = useState('');
     const [category, setCategory] = useState('');
     const [ownerID, setOwnerId] = useState('');
     const [startingBid, setStartingBid] = useState('');
@@ -33,6 +34,7 @@ const AddTask: React.FC = () => {
             await axios.post('http://localhost:3001/api/task', {
                 title,
                 description,
+                fileUrl,
                 status,
                 category,
                 ownerID: Number(ownerID),
@@ -68,6 +70,16 @@ const AddTask: React.FC = () => {
                         placeholder="Describe the task"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="taskFileUrl">
+                    <Form.Label>File URL</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter the file URL"
+                        value={fileUrl}
+                        onChange={(e) => setFileUrl(e.target.value)}
                     />
                 </Form.Group>
 
