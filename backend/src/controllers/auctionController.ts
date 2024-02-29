@@ -1,18 +1,17 @@
 import { Request, Response } from 'express';
-import {Bid} from '../types';
+import { inject, injectable } from 'tsyringe';
+import { AuctionService } from '@/services/auctionService';
 
-class AuctionController {
+@injectable()
+export class AuctionController {
+  constructor(
+    @inject(AuctionService) private readonly auctionController: AuctionService,
+  ) {}
+
   async bidOnTask(req: Request, res: Response) {
     try {
-      const { taskId, bidderId, amount } = req.body as Bid;
-      const bid = await prisma.bid.create({
-        data: {
-          taskId: Number(taskId),
-          bidderId: Number(bidderId),
-          amount,
-        },
-      });
-      res.status(201).json(bid);
+      const record = this.auctionController.bidOnTask(req.body);
+      res.status(201).json(record);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
@@ -21,14 +20,8 @@ class AuctionController {
 
   async getAuctionDetails(req: Request, res: Response) {
     try {
-      const { taskId } = req.params;
-      const auctionDetails = await prisma.task.findUnique({
-        where: { id: Number(taskId) },
-        include: {
-          bids: true,
-        },
-      });
-      res.status(200).json(auctionDetails);
+      const record = this.auctionController.getAuctionDetails(req.body);
+      res.status(200).json(record);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
@@ -37,17 +30,13 @@ class AuctionController {
 
   async closeAuction(req: Request, res: Response) {
     try {
-      const { taskId } = req.params;
-      const updatedTask = await prisma.task.update({
-        where: { id: Number(taskId) },
-        data: { status: 'SOLD' },
-      });
-      res.status(200).json({ message: 'Auction closed successfully', task: updatedTask });
+      const record = this.auctionController.closeAuction(req.body);
+      res
+        .status(200)
+        .json({ message: 'Auction closed successfully', task: record });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 }
-
-export default new AuctionController();

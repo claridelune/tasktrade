@@ -1,3 +1,7 @@
+import prisma from '@/configs';
+import { injectable } from 'tsyringe';
+
+@injectable()
 export class AuctionService {
   async bidOnTask(bidDto: any) {
     const { taskId, bidderId, amount } = bidDto;
@@ -6,8 +10,8 @@ export class AuctionService {
       data: {
         taskId,
         bidderId,
-        amount
-      }
+        amount,
+      },
     });
 
     return bid;
@@ -25,7 +29,7 @@ export class AuctionService {
   async closeAuction(taskId: number) {
     const updatedTask = await prisma.task.update({
       where: { id: taskId },
-      data: { status: 'SOLD' }
+      data: { status: 'SOLD' },
     });
 
     return updatedTask;
