@@ -1,48 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useAuth } from '../context/authContext';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 interface Task {
   id: number;
   title: string;
   description: string;
   price: number;
+  status: 'AVAILABLE' | 'SOLD' | 'AUCTION';
 }
 
 const Dashboard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('/api/task', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setTasks(response.data.tasks);
+        const { data } = await axios.get('/api/task');
+        setTasks(data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
     };
 
-    if (user) {
-      fetchTasks();
-    }
-  }, [user]);
+    fetchTasks();
+  }, []);
 
   return (
     <Container>
-      <h1>Dashboard</h1>
       <Row>
         {tasks.map((task) => (
-          <Col key={task.id} sm={12} md={6} lg={4}>
-            <Card className="mb-4">
+          <Col key={task.id} md={4} className="mb-3">
+            <Card>
               <Card.Body>
                 <Card.Title>{task.title}</Card.Title>
                 <Card.Text>{task.description}</Card.Text>
-                <Card.Text>Price: ${task.price}</Card.Text>
-                <Button variant="primary">Buy</Button>
+                <Card.Text>${task.price}</Card.Text>
+                {task.status === 'AVAILABLE' && (
+                  <Button variant="primary" onClick={() => navigate(`/task/${task.id}`)}>Buy</Button>
+                )}
+                {task.status === 'AUCTION' && (
+                  <Button variant="warning" onClick={() => navigate(`/auction/${task.id}`)}>Make a Bid</Button>
+                )}
               </Card.Body>
             </Card>
           </Col>

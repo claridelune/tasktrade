@@ -8,6 +8,8 @@ import Dashboard from './components/Dashboard';
 import AddTask from './components/AddTask';
 import Cart from './components/Cart';
 import PrivateRoute from './components/PrivateRoute';
+import AuctionDetails from './components/AuctionDetails';
+import TaskDetails from './components/TaskDetails';
 
 const App: React.FC = () => {
     return (
@@ -15,10 +17,12 @@ const App: React.FC = () => {
             <Navbar />
             <Routes>
                 <Route element={<PrivateRoute />}>
+                </Route>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/add-task" element={<AddTask />} />
                     <Route path="/cart" element={<Cart />} />
-                </Route>
+                    <Route path="/auction/:taskId" element={<AuctionDetails />} />
+                    <Route path="/task/:taskId" element={<TaskDetails />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
             </Routes>

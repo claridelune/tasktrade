@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
           </Nav>
           {user && (
             <Nav>
-              <Nav.Link disabled>{user}</Nav.Link>
+              <Nav.Link disabled>{user.username}</Nav.Link>
             </Nav>
           )}
         </BootstrapNavbar.Collapse>
