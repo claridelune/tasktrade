@@ -6,6 +6,7 @@ import TaskService from '../services/taskService'
 const taskSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
+  url: Joi.string().required(),
   status: Joi.string().valid(TaskStatus.Available, TaskStatus.Sold, TaskStatus.Auction),
   category: Joi.string().valid(Category.Art, Category.Humanities, Category.Languages, Category.Mathematics, Category.Science, Category.Technology),
   ownerId: Joi.number().required(),

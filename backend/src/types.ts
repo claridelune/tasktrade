@@ -2,6 +2,7 @@ export interface Task {
   id: number;
   title: string;
   description: string;
+  url: string;
   status: TaskStatus;
   ownerId: number;
   startingBid: number;

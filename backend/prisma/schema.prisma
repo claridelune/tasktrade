@@ -25,6 +25,7 @@ model Task {
   id          Int         @id @default(autoincrement())
   title       String
   description String
+  url         String
   price       Float
   status      TaskStatus
   category    Category
